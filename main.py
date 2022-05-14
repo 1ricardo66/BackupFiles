@@ -20,3 +20,5 @@ doc = ' '.join(lines)
 file.write(doc)
 file.close()
 print(lines)
+
+

@@ -18,6 +18,8 @@ for i in range(len(file)):
 ssh = paramiko.SSHClient()
 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 command = "export"
+""" 
+
 for i in dictFile:
     host = dictFile[i].get("host")
     username = dictFile[i].get("username")
@@ -34,4 +36,40 @@ for i in dictFile:
 
 print(host)
 
+"""
 
+routerName = ""
+def routerSelection(name, idArray):
+    #routerName = name[idArray].get("name")
+    #print(routerName)
+    if(name[idArray].get("name") == "Mikrotik"):
+        print("Working")
+        return backupMikrotik(name,idArray)
+
+    else:
+        return ""
+
+def backupMikrotik(data,idArray):
+    host = data[idArray].get("host")
+    username = data[idArray].get("username")
+    password = data[idArray].get("password")
+    name = data[idArray].get("name")
+    ssh.connect(host, 22, username, password)
+    stdin, stdout, stderr = ssh.exec_command(command)
+    lines = stdout.readlines()
+    doc = ' '.join(lines)
+    stdin, stdout, stderr = ssh.exec_command("system identity print")
+    lines = stdout.readlines()
+    lines = str(lines[0])
+    backupArchive = open("/home/ricardo/Documentos/PythonProjects/BackupFiles/"+lines.strip("name: ")+".txt","w")
+    
+    backupArchive.write(doc)
+    backupArchive.close()
+    print(i)
+
+
+def exec():
+    for i in dictFile:
+        routerSelection(dictFile,i)
+
+        
