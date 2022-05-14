@@ -51,25 +51,30 @@ def routerSelection(name, idArray):
         return ""
 
 def backupMikrotik(data,idArray):
-    host = data[idArray].get("host")
-    username = data[idArray].get("username")
-    password = data[idArray].get("password")
-    name = data[idArray].get("name")
-    ssh.connect(host, 22, username, password)
-    stdin, stdout, stderr = ssh.exec_command(command)
-    lines = stdout.readlines()
-    doc = ' '.join(lines)
-    stdin, stdout, stderr = ssh.exec_command("system identity print")
-    lines = stdout.readlines()
-    lines = str(lines[0])
-    print(date)
-    dateAndName = "Backup-"+lines.strip("name: ")+"-"+date+".txt"
-    path = "/home/ricardo/Documentos/PythonProjects/BackupFiles/"+dateAndName 
-    backupArchive = open(path,"w")
-    
-    backupArchive.write(doc)
-    backupArchive.close()
-    print(i)
+
+    try:
+
+        host = data[idArray].get("host")
+        username = data[idArray].get("username")
+        password = data[idArray].get("password")
+        name = data[idArray].get("name")
+        ssh.connect(host, 22, username, password)
+        stdin, stdout, stderr = ssh.exec_command(command)
+        lines = stdout.readlines()
+        doc = ' '.join(lines)
+        stdin, stdout, stderr = ssh.exec_command("system identity print")
+        lines = stdout.readlines()
+        lines = str(lines[0])
+        print(date)
+        dateAndName = "Backup-"+lines.strip("name: ")+"-"+date+".txt"
+        path = "/home/ricardo/Documentos/PythonProjects/BackupFiles/"+dateAndName 
+        backupArchive = open(path,"w")
+        
+        backupArchive.write(doc)
+        backupArchive.close()
+        print(i)
+    except paramiko.ssh_exception.AuthenticationException:
+        print("Authentication failed")
 
 
 def exec():
