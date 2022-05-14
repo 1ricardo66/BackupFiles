@@ -1,11 +1,12 @@
 import json
 import paramiko
 import warnings
+from datetime import datetime
 from cryptography.utils import CryptographyDeprecationWarning
 with warnings.catch_warnings():
     warnings.filterwarnings('ignore', category=CryptographyDeprecationWarning)
 
-
+date = str(datetime.date(datetime.now()))
 jsonArchive = open("data.json", encoding='utf-8')
 
 
@@ -61,7 +62,10 @@ def backupMikrotik(data,idArray):
     stdin, stdout, stderr = ssh.exec_command("system identity print")
     lines = stdout.readlines()
     lines = str(lines[0])
-    backupArchive = open("/home/ricardo/Documentos/PythonProjects/BackupFiles/"+lines.strip("name: ")+".txt","w")
+    print(date)
+    dateAndName = "Backup-"+lines.strip("name: ")+"-"+date+".txt"
+    path = "/home/ricardo/Documentos/PythonProjects/BackupFiles/"+dateAndName 
+    backupArchive = open(path,"w")
     
     backupArchive.write(doc)
     backupArchive.close()
