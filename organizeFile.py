@@ -1,6 +1,7 @@
 import json
 import paramiko
 import warnings
+from webAPI import getWebAPI
 from datetime import datetime
 from cryptography.utils import CryptographyDeprecationWarning
 with warnings.catch_warnings():
@@ -10,7 +11,8 @@ date = str(datetime.date(datetime.now()))
 jsonArchive = open("data.json", encoding='utf-8')
 
 
-file = json.load(jsonArchive)
+#file = json.load(jsonArchive)
+file = getWebAPI()
 dictFile = dict()
 
 for i in range(len(file)):
