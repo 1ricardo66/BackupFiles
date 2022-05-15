@@ -20,7 +20,7 @@ for i in range(len(file)):
 
 ssh = paramiko.SSHClient()
 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-command = "export"
+
 """ 
 
 for i in dictFile:
@@ -45,7 +45,12 @@ routerName = ""
 def routerSelection(name, idArray):
     #routerName = name[idArray].get("name")
     #print(routerName)
+
     if(name[idArray].get("name") == "Mikrotik"):
+        print("Working")
+        return backupMikrotik(name,idArray)
+    
+    elif(name[idArray].get("name") == "Huawei"):
         print("Working")
         return backupMikrotik(name,idArray)
 
@@ -61,6 +66,7 @@ def backupMikrotik(data,idArray):
         password = data[idArray].get("password")
         name = data[idArray].get("name")
         ssh.connect(host, 22, username, password)
+        command = "export"
         stdin, stdout, stderr = ssh.exec_command(command)
         lines = stdout.readlines()
         doc = ' '.join(lines)
@@ -78,6 +84,27 @@ def backupMikrotik(data,idArray):
     except paramiko.ssh_exception.AuthenticationException:
         print("Authentication failed")
 
+
+def backupHuawei(data,idArray):
+    try:
+
+        host = data[idArray].get("host")
+        username = data[idArray].get("username")
+        password = data[idArray].get("password")
+        name = data[idArray].get("name")
+        ssh.connect(host, 22, username, password)
+        command = "dis cu | no"
+        stdin, stdout, stderr = ssh.exec_command(command)
+        lines = stdout.readlines()
+        doc = ' '.join(lines)
+        path = "/home/ricardo/Documentos/PythonProjects/BackupFiles/HuaweiTest"
+        backupArchive = open(path,"w")
+        
+        backupArchive.write(doc)
+        backupArchive.close()
+        print(i)
+    except paramiko.ssh_exception.AuthenticationException:
+        print("Authentication failed")
 
 def exec():
     for i in dictFile:
